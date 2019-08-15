@@ -1,3 +1,3 @@
 # Alerts Handler
 
-## Webhook for `Grafana` alerts
+### Webhook for `Grafana` alerts
