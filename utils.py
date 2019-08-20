@@ -26,6 +26,6 @@ def render_query(measurement, tags, time, value):
 
 def parse_rule_name(rule_name):
     branch = re.search(r'([Оо]тдел.+?\s)([0-9]+)', rule_name)
-    if not branch.groups():
+    if not branch or not branch.groups():
         raise ValueError
     return branch.groups()[1]

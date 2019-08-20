@@ -1,8 +1,8 @@
 import json
 from datetime import datetime
 
-from flask import request, Response
-from app import app
+from flask import request, Response, abort
+from app import app, auth
 from utils import influx_client, render_query, parse_rule_name
 
 
@@ -12,13 +12,19 @@ def index():
 
 
 @app.route('/alerts', methods=['POST', 'PUT',])
+@auth.login_required
 def alerts():
     data = request.json
     data['date'] = datetime.today()
     data['ruleUrl'] = data['ruleUrl'].replace('localhost', app.config['HOST'])
 
+    try:
+        branch = parse_rule_name(data['ruleName'])
+    except ValueError:
+        abort(400)
+
     tags = {
-        'branch': parse_rule_name(data['ruleName']),
+        'branch': branch,
         'state': data['state'],
     }
 

@@ -7,6 +7,10 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 class Config:
     HOST = os.getenv('HOST')
+
+    BASE_AUTH_USER = os.getenv('BASE_AUTH_USER')
+    BASE_AUTH_PASSWORD = os.getenv('BASE_AUTH_PASSWORD')
+
     INFLUX_HOST = os.getenv('INFLUX_HOST')
     INFLUX_PORT = os.getenv('INFLUX_PORT')
     INFLUX_DB_NAME = os.getenv('INFLUX_DB_NAME')
