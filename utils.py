@@ -11,7 +11,7 @@ influx_client = InfluxDBClient(
     ssl=app.config['INFLUX_HTTPS'])
 
 
-def render_query(measurement, tags, time, value=None):
+def render_query(measurement, tags, time, value):
     output = {
         'measurement': measurement,
         'tags': tags,
@@ -20,10 +20,12 @@ def render_query(measurement, tags, time, value=None):
             'value': value
         }
     }
-    if value is None:
-        output.pop('fields')
 
     return output
 
+
 def parse_rule_name(rule_name):
-    return
+    branch = re.search(r'([Оо]тдел.+?\s)([0-9]+)', rule_name)
+    if not branch.groups():
+        raise ValueError
+    return branch.groups()[1]

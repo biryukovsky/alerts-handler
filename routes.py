@@ -3,7 +3,7 @@ from datetime import datetime
 
 from flask import request, Response
 from app import app
-from utils import influx_client, render_query
+from utils import influx_client, render_query, parse_rule_name
 
 
 @app.route('/')
@@ -18,7 +18,7 @@ def alerts():
     data['ruleUrl'] = data['ruleUrl'].replace('localhost', app.config['HOST'])
 
     tags = {
-        'ruleName': data['ruleName'],
+        'branch': parse_rule_name(data['ruleName']),
         'state': data['state'],
     }
 
@@ -27,7 +27,8 @@ def alerts():
             render_query(
                 measurement=app.config['INFLUX_MEASUREMENT'],
                 tags=tags,
-                time=data['date']
+                time=data['date'],
+                value=1.0
             )
         ])
         return Response(status=200)
@@ -40,7 +41,7 @@ def alerts():
                 measurement=app.config['INFLUX_MEASUREMENT'],
                 tags=tags,
                 time=data['date'],
-                value=float(match['value'])
+                value=1.0
             )
         )
 
